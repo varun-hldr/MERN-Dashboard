@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const BodyParser = require("body-parser");
+// const BodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const app = express();
@@ -19,9 +19,13 @@ mongoose.connect(
 );
 
 // Middleware
-app.use(BodyParser.urlencoded({ extended: false }));
-app.use(BodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 // Route Middleware
 app.use("/auth", auth);
